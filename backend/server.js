@@ -1,14 +1,37 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
 import authRoutes from "./routes/auth.js";
 
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
 
-app.use(cors());
+// Aquí defines los dominios permitidos (reemplaza con tus dominios reales)
+const allowedOrigins = [
+  "https://server-app-dfhhfxbaaxb3csgj.westus3-01.azurewebsites.net",
+
+];
+
+// Configuración segura de CORS
+const corsOptions = {
+  origin: function(origin, callback) {
+    if (!origin) return callback(null, true); // Permite peticiones sin origen (ej: Postman)
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true); // Origen permitido
+    } else {
+      callback(new Error("No permitido por CORS")); // Origen no permitido
+    }
+  }
+};
+
+app.use(cors(corsOptions)); // Usa CORS con configuración segura
 app.use(express.json());
-app.use(express.static("../public"));
 
 app.use("/api", authRoutes);
 
