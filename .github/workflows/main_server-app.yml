@@ -7,44 +7,35 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      - name: Set up Node.js version
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "22.x"
+          node-version: "18"
 
       - name: Install dependencies
+        working-directory: ./backend
         run: npm install
 
-      - name: Build project (optional)
+      - name: Build project (si tienes build step)
+        working-directory: ./backend
         run: npm run build --if-present
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: server-app
-          path: .
-  
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: server-app
+      # (Opcional) Empaqueta todo el backend como ZIP
+      #- name: Archive build
+      #  working-directory: ./backend
+      #  run: zip -r ../backend.zip .
 
       - name: Deploy to Azure Web App
-        uses: azure/webapps-deploy@v3
+        uses: azure/webapps-deploy@d178a6b2e0a7f59c4c2e8d8c9f0a5c2f1d2a3b4c
         with:
           app-name: "Server-app"
-          slot-name: "Production"
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B40EC6A68B4842119E1FC8D288CB347C }}
-          package: .
+          slot-name: "production"
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISH_PROFILE }}
+          package: ./backend   # o usa backend.zip si activas el paso de zip
