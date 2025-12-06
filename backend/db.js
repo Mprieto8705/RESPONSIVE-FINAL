@@ -18,22 +18,20 @@ export default db;**/
 import mysql from "mysql2";
 
 const db = mysql.createConnection({
-host: "server-bd-app.mysql.database.azure.com",
-user: "mprieto",
-password: "870519Ap/",
-database: "ecommerce_db",
-port: 3306,
-ssl: {
-rejectUnauthorized: true
- }
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT,
+  ssl: { rejectUnauthorized: false }
 });
 
 db.connect(err => {
- if (err) {
-   console.error("❌ Error conectando a Azure MySQL:", err);
-   return;
- }
- console.log("✅ Conectado a Azure MySQL");
+  if (err) {
+    console.error("❌ Error conectando a Azure MySQL:", err);
+    return;
+  }
+  console.log("✅ Conectado a Azure MySQL");
 });
 
 export default db;
