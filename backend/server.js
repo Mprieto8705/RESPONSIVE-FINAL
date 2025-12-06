@@ -12,8 +12,8 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// Oculta la versión de Express
-app.disable('x-powered-by');
+// ⚡ Desactivar cabecera que revela la versión de Express
+app.disable("x-powered-by");
 
 // Aquí defines los dominios permitidos (reemplaza con tus dominios reales)
 const allowedOrigins = [
