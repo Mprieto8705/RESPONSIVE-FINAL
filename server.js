@@ -12,6 +12,9 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+// ⚡ Desactivar cabecera que revela la versión de Express
+app.disable("x-powered-by");
+
 // Aquí defines los dominios permitidos (reemplaza con tus dominios reales)
 const allowedOrigins = [
   "https://server-app-dfhhfxbaaxb3csgj.westus3-01.azurewebsites.net",
