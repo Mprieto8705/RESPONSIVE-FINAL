@@ -14,7 +14,8 @@ async function login() {
   if (data.success) {
     msg.style.color = "green";
     msg.textContent = "Inicio de sesión exitoso. Bienvenido " + data.user;
-    setTimeout(() => (window.location.href = "index.html"), 1500);
+    setTimeout(() => (globalThis.location.href = "index.html"), 1500);
+
   } else {
     msg.style.color = "red";
     msg.textContent = data.error || "Error al iniciar sesión";
